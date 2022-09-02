@@ -1,4 +1,3 @@
-// LOGICA
 
 function compra(precio) {
 
@@ -14,6 +13,7 @@ function compra(precio) {
 
     function aplicaDescuento(precio) {
         let contador = 0;
+        // CICLO
         do {
             let codigoDTO = prompt(`ingrese su código de descuento`);
             if (codigoDTO === "DESCUENTO") {
