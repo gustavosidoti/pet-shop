@@ -35,8 +35,6 @@ const descuento = 0.10;
         totalCompra += totalProductoIndividual;
     }
 
-    //alert(`TOTAL DE LA COMPRA $ ${totalCompra}`);
-
     if(totalCompra > 0)
     
     {
