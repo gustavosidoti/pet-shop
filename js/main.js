@@ -1,6 +1,6 @@
 
 // Arrays de Productos
-const productsDB = [
+const products = [
     {
       id: 1,
       marca: "Royal Canin",
@@ -37,8 +37,14 @@ const productsDB = [
         img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663447283/PetShop/royal-canin-mini-adult-8-kg_aouftw.jpg",
       },
   ];
+  // Guardamos los productos en el localStorage
+  localStorage.setItem("productos", JSON.stringify(products));
 
-  let carrito = [];
+  // Obtenemos los productos desde el localStorage
+  let productsDB = JSON.parse(localStorage.getItem("productos"));
+
+  // Obtenemos los productos del carrito. Si no hay inicializamos vacío el array
+  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
   const items = document.querySelector("#items");
   const carritoHTML = document.querySelector("#carrito");
@@ -63,6 +69,7 @@ const productsDB = [
     });
   }
   renderizarProductos();
+  renderizarCarrito();
 
  
   function agregarProductoAlCarrito(id) {
@@ -81,6 +88,10 @@ const productsDB = [
       producto.cantidad = 1;
       carrito.push(producto);
     }
+    // Guardamos el carrito en el localStorage actualizado
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    
+    // Mostramos alerta de éxito
     Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -143,8 +154,14 @@ const productsDB = [
     if (carrito[id].cantidad === 0) {
       carrito.splice(id, 1);
     }
+
+    // Actualizamos el carrito en el localStorage
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+
     renderizarCarrito();
     calcularTotal();
+
+    // Mostramos alerta de éxito de la operación
     Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -156,6 +173,7 @@ const productsDB = [
   
   function vaciarCarrito() {
     carrito = [];
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     renderizarCarrito();
     calcularTotal();
     Swal.fire({
