@@ -43,7 +43,7 @@ const products = [
   // Obtenemos los productos desde el localStorage
   let productsDB = JSON.parse(localStorage.getItem("productos"));
 
-  // Obtenemos los productos del carrito. Si no hay inicializamos vacío el array
+  //OPERADOR LÓGICO OR - Obtenemos los productos del carrito. Si no hay inicializamos vacío el array
   let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
   const items = document.querySelector("#items");
@@ -70,9 +70,9 @@ const products = [
   }
   renderizarProductos();
   renderizarCarrito();
-
+  calcularTotal();
  
-  function agregarProductoAlCarrito(id) {
+  function agregarProductoAlCarrito (id) {
 
     // Busca el producto seleccionado en la Base de datos
     let producto = productsDB.find((producto) => producto.id === id);
@@ -80,14 +80,8 @@ const products = [
    // Busca en el carro si el producto seleccionado ya existe.
     let productoEnCarrito = carrito.find((producto) => producto.id === id);
   
-    if (productoEnCarrito) {
-      // Si existe suma 1 unidad más de ese producto.  
-      productoEnCarrito.cantidad++;
-    } else {
-      // Si no existe agrega la unidad seleccionada al carro  
-      producto.cantidad = 1;
-      carrito.push(producto);
-    }
+    // TERNARIO Si existe suma 1 unidad más de ese producto. Si no existe agrega la unidad seleccionada al carro  
+    productoEnCarrito ? productoEnCarrito.cantidad++ : ( producto.cantidad = 1, carrito.push(producto));
     // Guardamos el carrito en el localStorage actualizado
     localStorage.setItem("carrito", JSON.stringify(carrito));
     
@@ -105,7 +99,7 @@ const products = [
     
   }
   
-  function renderizarCarrito() {
+  function renderizarCarrito () {
     console.log(carritoHTML);
   
     let htmlCarrito = "";
@@ -132,7 +126,7 @@ const products = [
     carritoHTML.innerHTML = htmlCarrito;
   }
   
-  function calcularTotal() {
+  function calcularTotal()  {
     let total = 0;
   
     carrito.forEach((prod) => {
@@ -148,12 +142,14 @@ const products = [
   //****Editar Carrito***/
   //*Cuántos hay? Elimino un producto o vaciar carrito.
   
-  function eliminarProductoDelCarrito(id) {
+  function eliminarProductoDelCarrito (id) {
     carrito[id].cantidad--;
   
-    if (carrito[id].cantidad === 0) {
+    // si la cantidad de un producto es 0 eliminar su id de carrito
+    if (carrito[id].cantidad === 0){
       carrito.splice(id, 1);
     }
+    
 
     // Actualizamos el carrito en el localStorage
     localStorage.setItem("carrito", JSON.stringify(carrito));
@@ -171,7 +167,7 @@ const products = [
       });
   }
   
-  function vaciarCarrito() {
+  function vaciarCarrito () {
     carrito = [];
     localStorage.setItem("carrito", JSON.stringify(carrito));
     renderizarCarrito();
