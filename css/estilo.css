@@ -84,3 +84,8 @@
     transition-delay: 200ms;
     transform: translateX(2);
 }
+
+.dataUser {
+    margin: 0 60% 13px 0;
+    font-size: large;
+}

@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" 
     integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" 
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
     
     <form action="">
         <h1 class="tittle">Login</h1>
+        <br />
         <label>
             <i class="fa-solid fa-user"></i>
             <input type="text" id="username">
@@ -22,11 +25,13 @@
             <i class="fa-solid fa-lock"></i>
             <input type="password" id="password">
         </label>
-        <a href="" class="link"> No tiene cuenta - Registrese</a>
+        <a href="./registro.html" class="link"> No tiene cuenta - Registrese</a>
 
         <button id="button">Login</button>
     </form>
 
     <script src="../js/login.js"></script>
+    <!-- sweetalert2 -->
+    <script src="sweetalert2.min.js"></script>
 </body>
 </html>
