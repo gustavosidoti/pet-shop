@@ -10,18 +10,32 @@ button.addEventListener('click', async(e) => {
         username: username.value,
         password: password.value
     };
-    // Guardamos los datos del usuario en el localStorage
-    localStorage.setItem("usuario", JSON.stringify(data));
     
-    
-    await Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Usuario creado con éxito',
-        showConfirmButton: false,
-        timer: 1500
-      });
+    if(data.name == "" || data.username == "" || data == ""){
 
-    window.location = "login.html";
+        await Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Complete todos los campos',
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+    }else{
+        // Guardamos los datos del usuario en el localStorage
+        localStorage.setItem("usuario", JSON.stringify(data));
+    
+    
+        await Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Usuario creado con éxito',
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+         window.location = "login.html";
+    }
+    
     
 });

@@ -1,42 +1,17 @@
-// Arrays de Productos
-const products = [{
-    id: 1,
-    marca: "Royal Canin",
-    descripcion: "Kitten Chaton 7kg",
-    precio: 13000,
-    img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663442877/PetShop/7477-Royal-Canin-Chaton_x5i5ml.png",
-  },
-  {
-    id: 2,
-    marca: "Royal Canin",
-    descripcion: "Large Adult 7kg",
-    precio: 12000,
-    img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663442877/PetShop/royalcanin-large_fhi9ug.jpg",
-  },
-  {
-    id: 3,
-    marca: "Royal Canin",
-    descripcion: "Renal 7kg",
-    precio: 13000,
-    img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663442554/PetShop/rc-renal_fzrkh3.jpg",
-  },
-  {
-    id: 4,
-    marca: "Royal Canin",
-    descripcion: "Gastrointestinal 7kg",
-    precio: 15000,
-    img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663442554/PetShop/rc-gastro_doxvrf.jpg",
-  },
-  {
-    id: 5,
-    marca: "Royal Canin",
-    descripcion: "Mini Adulto 7kg",
-    precio: 10000,
-    img: "https://res.cloudinary.com/dsnccd8pt/image/upload/v1663447283/PetShop/royal-canin-mini-adult-8-kg_aouftw.jpg",
-  },
-];
-// Guardamos los productos en el localStorage
-localStorage.setItem("productos", JSON.stringify(products));
+
+// leemos nuestra API y guardamos en el localStorage los productos
+const leerApi = async () => {
+    await fetch('productos.json')
+          .then(function(res) {
+            return res.json();
+          })
+          .then(function(data){
+            // Guardamos los productos en el localStorage
+            localStorage.setItem("productos", JSON.stringify(data));
+          });
+};
+
+leerApi();
 
 // Obtenemos los productos desde el localStorage
 let productsDB = JSON.parse(localStorage.getItem("productos"));
@@ -135,13 +110,17 @@ function agregarProductoAlCarrito(id) {
   localStorage.setItem("carrito", JSON.stringify(carrito));
 
   // Mostramos alerta de éxito
-  Swal.fire({
-    position: 'top-end',
-    icon: 'success',
-    title: 'Producto añadido al Carrito',
-    showConfirmButton: false,
-    timer: 1500
-  });
+  Toastify({
+    text: "Producto añadido al carrito",
+    offset: {
+      x: 50, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+      y: 60 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+    },
+    className: "info",
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    }
+  }).showToast();
   // Llama a la función de renderización del carro y calcula el total
   renderizarCarrito();
   calcularTotal();
@@ -186,6 +165,11 @@ function calcularTotal() {
 
   const t = document.getElementById("total");
   t.innerHTML = `<h5>$${total}</h5>`;
+
+  const btnComprar = document.getElementById('boton-comprar');
+  const btnVaciar = document.getElementById('boton-vaciar');
+  total === 0 ? (btnComprar.disabled = true, btnVaciar.disabled = true)
+              : (btnComprar.disabled = false, btnVaciar.disabled = false); 
 }
 
 //****Editar Carrito***/
@@ -207,13 +191,19 @@ function eliminarProductoDelCarrito(id) {
   calcularTotal();
 
   // Mostramos alerta de éxito de la operación
-  Swal.fire({
-    position: 'top-end',
-    icon: 'warning',
-    title: 'Se ha quitado el producto del Carrito ',
-    showConfirmButton: false,
-    timer: 1500
-  });
+  
+  Toastify({
+    text: "Se ha quitado del carrito",
+    offset: {
+      x: 50, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+      y: 60 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+    },
+    className: "info",
+    style: {
+      background: "linear-gradient(to right, #f00a06, #d27108)",
+    }
+  }).showToast();
+  
 }
 
 function vaciarCarrito() {
@@ -221,17 +211,50 @@ function vaciarCarrito() {
   localStorage.setItem("carrito", JSON.stringify(carrito));
   renderizarCarrito();
   calcularTotal();
-  Swal.fire({
-    position: 'top-end',
-    icon: 'error',
-    title: 'Se ha vaciado el Carrito ',
-    showConfirmButton: false,
-    timer: 1500
-  });
+  Toastify({
+    text: "Se han quitado todos los productos del carrito",
+    offset: {
+      x: 50, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+      y: 60 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+    },
+    className: "info",
+    style: {
+      background: "linear-gradient(to right, #06a6f0, #0830d2)",
+    }
+  }).showToast();
 }
+
+
+// Función finalizar compra
+const finalizarCompra = async () => {
+
+  carrito = [];
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+
+  await Swal.fire({
+    title: 'Gracias por tu compra',
+    showClass: {
+      popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp'
+    }
+  });
+  
+  window.location = "./index.html";
+};
+
+// Captura eventos de los botones al final del carrito
 
 const vaciar = document.querySelector("#boton-vaciar");
 vaciar.addEventListener("click", vaciarCarrito);
+
+const finalizar = document.querySelector("#boton-comprar");
+finalizar.addEventListener("click", finalizarCompra);
+
+
+
+
 
 // Función que cierra la sesión
 
@@ -240,12 +263,13 @@ async function cerrarSesion() {
   localStorage.removeItem('sesion');
   carrito = [];
   localStorage.setItem("carrito", JSON.stringify(carrito));
+  
   let timerInterval;
   await Swal.fire({
     position: 'top-end',
     title: 'Cerrando sesión!',
     html: 'Por favor <b></b> aguarde.',
-    timer: 1300,
+    timer: 1100,
     timerProgressBar: true,
     showCancelButton: false,
     showConfirmButton: false,
@@ -261,9 +285,10 @@ async function cerrarSesion() {
     }
   }).then((result) => {
     
-    if (result.dismiss === Swal.DismissReason.timer) {
-      console.log('I was closed by the timer')
-    }
+    window.location = "./index.html";
+    
   });
-  window.location = "./index.html";
+  
+ 
 }
+

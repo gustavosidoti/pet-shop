@@ -66,3 +66,7 @@ form button {
     cursor: pointer;
     font-size: 20px;
 }
+
+.algo{
+    background: linear-gradient(to right, #06a6f0, #0830d2)
+}
